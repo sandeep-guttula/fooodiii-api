@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/constants"
 import { createUser } from '../services/auth.service';
 
-
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await createUser(req.body);
 
@@ -14,7 +13,7 @@ export const signup = async (req: Request, res: Response) => {
             { expiresIn: JWT_EXPIRES_IN }
         );
 
-        return res.status(201).json({
+        res.status(201).json({
             message: 'User created successfully',
             user: {
                 id: user.id,
@@ -25,6 +24,6 @@ export const signup = async (req: Request, res: Response) => {
             token,
         });
     } catch (error: any) {
-        return res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
