@@ -1,7 +1,10 @@
 import prisma from '@shared/database/prisma';
-import { SignupInput } from '../types/index';
+import { LoginInput, SignupInput } from '../types/index';
 import { hashPassword } from '../utils/hash';
 import { Role } from '@prisma/client';
+import { comparePassword } from '../utils/hash';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET, JWT_EXPIRES_IN } from '../config/constants';
 
 export const createUser = async (data: SignupInput) => {
     const existing = await prisma.user.findUnique({ where: { email: data.email } });
@@ -19,4 +22,20 @@ export const createUser = async (data: SignupInput) => {
     });
 
     return user;
+};
+
+export const loginUser = async (data: LoginInput) => {
+    const user = await prisma.user.findUnique({ where: { email: data.email } });
+    if (!user) throw new Error('Invalid credentials');
+
+    const isValid = await comparePassword(data.password, user.passwordHash);
+    if (!isValid) throw new Error('Invalid credentials');
+
+    const token = jwt.sign(
+        { id: user.id, role: user.role },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    return { user, token };
 };

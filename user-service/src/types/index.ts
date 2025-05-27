@@ -6,3 +6,8 @@ export interface SignupInput {
     password: string;
     role?: Role;
 }
+
+export interface LoginInput {
+    email: string;
+    password: string;
+}
