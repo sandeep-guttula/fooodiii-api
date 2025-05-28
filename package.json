@@ -3,17 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:user && npm run build:restaurant",
+    "build": "npm run build:user && npm run build:restaurant && npm run build:delivery",
     "build:user": "cd user-service && npm run build",
     "build:restaurant": "cd restaurant-service && npm run build",
-    "build:delivery": "cd delivery-service && npm run build",
-    "start": "concurrently \"npm run start:user\" \"npm run start:restaurant\" \"npm run start:delivery\"",
-    "start:user": "cd user-service && npm start",
-    "start:restaurant": "cd restaurant-service && npm start",
-    "start:delivery": "cd delivery-service && npm start",
-    "postinstall": "npm run install:services && npm run build",
-    "install:services": "cd user-service && npm install && cd ../restaurant-service && npm install && cd ../delivery-service && npm install"
+    "build:delivery": "cd delivery-service && npm run build"
   },
   "keywords": [],
   "author": "",
