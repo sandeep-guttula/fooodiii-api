@@ -4,8 +4,11 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+    console.log('Authenticating token...');
+    console.log(`Authorization header: ${req.headers['authorization']}`);
 
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
         res.status(401).json({ error: 'Access token required' });
