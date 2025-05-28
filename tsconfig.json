@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "./",
+        "composite": true
+    },
+    "include": [
+        "shared/**/*",
+        "user-service/src",
+        "restaurant-service/src",
+        "delivery-service/src"
+    ]
+}
