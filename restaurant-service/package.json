@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/restaurant-service/src/server.js",
     "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register src/server.ts",
     "prisma:generate": "prisma generate --schema=../shared/database/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate deploy",
