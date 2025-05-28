@@ -2,19 +2,10 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm run build && npm start"
+startCommand = "npm run prisma:generate && npm run build && npm start"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 
-[[services]]
-name = "user-service"
-source = "user-service"
-
-[[services]]
-name = "restaurant-service" 
-source = "restaurant-service"
-
-[[services]]
-name = "delivery-service"
-source = "delivery-service"
+[build.env]
+NODE_ENV = "production"

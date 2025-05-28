@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:user && npm run build:restaurant && npm run build:delivery",
+    "postinstall": "npm run prisma:generate",
+    "prisma:generate": "prisma generate --schema=shared/database/prisma/schema.prisma",
+    "build": "npm run prisma:generate && npm run build:user && npm run build:restaurant && npm run build:delivery",
     "build:user": "cd user-service && npm run build",
     "build:restaurant": "cd restaurant-service && npm run build",
     "build:delivery": "cd delivery-service && npm run build",
@@ -22,19 +24,30 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
     "concurrently": "^9.1.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.10",
     "pg": "^8.16.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.21",
     "drizzle-kit": "^0.31.1",
     "prisma": "^6.8.2",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   }
 }

@@ -2,28 +2,34 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy root-level package files
+# Install dependencies first for better caching
 COPY package*.json ./
-
-# Copy individual service package files
 COPY user-service/package*.json ./user-service/
 COPY restaurant-service/package*.json ./restaurant-service/
 COPY delivery-service/package*.json ./delivery-service/
 
-# ✅ Copy shared prisma schema BEFORE npm ci
+# Copy shared directory (needed for Prisma schema)
 COPY shared ./shared
 
-# Install dependencies (this will run `postinstall` which includes prisma generate)
+# Install root dependencies
 RUN npm ci
 
-# Now copy the full source code (takes advantage of Docker cache)
+# Install service dependencies
+RUN cd user-service && npm ci
+RUN cd restaurant-service && npm ci  
+RUN cd delivery-service && npm ci
+
+# Copy source code
 COPY . .
 
-# Build the application - IMPORTANT: This creates the dist folders!
+# Generate Prisma client first
+RUN npm run prisma:generate
+
+# Build all services
 RUN npm run build
 
-# Expose service ports
+# Expose ports
 EXPOSE 3001 3002 3003
 
-# Default command - make sure to build before starting
-CMD ["sh", "-c", "npm run build && npm start"]
+# Start command
+CMD ["npm", "start"]
