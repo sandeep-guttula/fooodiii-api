@@ -3,7 +3,15 @@ import { createRestaurant, updateRestaurantStatus, getRestaurantsByOwner } from 
 
 export const addRestaurant = async (req: Request, res: Response): Promise<void> => {
     try {
+
+        if (!req.body.name || !req.body.address) {
+            res.status(400).json({ error: 'Name and address are required' });
+            return;
+        }
+
         const ownerId = (req as any).user.id;
+        console.log(`Owner ID: ${ownerId}`);
+
         const restaurant = await createRestaurant({ ...req.body, ownerId });
         res.status(201).json({
             message: 'Restaurant created successfully',

@@ -4,6 +4,7 @@ import { addMenuItem, updateMenuItem, deleteMenuItem, getMenuItems } from '../se
 export const createMenuItem = async (req: Request, res: Response): Promise<void> => {
     try {
         const menuItem = await addMenuItem(req.body);
+
         res.status(201).json({
             message: 'Menu item created successfully',
             data: menuItem
