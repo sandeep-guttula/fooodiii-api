@@ -15,13 +15,12 @@ interface PlaceOrderInput {
 export const placeOrder = async (data: PlaceOrderInput) => {
     const { userId, restaurantId, items } = data;
 
-    // Validate restaurant
     const restaurant = await prisma.restaurant.findUnique({
         where: { id: restaurantId, isOnline: true }
     });
+
     if (!restaurant) throw new Error('Restaurant not available');
 
-    // Calculate total amount
     let totalAmount = 0;
     const orderItemsData = [];
 

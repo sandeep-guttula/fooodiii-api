@@ -28,7 +28,6 @@ export const getAssignedOrders = async (agentId: string) => {
 };
 
 export const updateDeliveryStatus = async (orderId: string, status: DeliveryStatus, agentId: string) => {
-    // Verify order is assigned to this agent
     const order = await prisma.order.findFirst({
         where: {
             id: orderId,
@@ -40,7 +39,6 @@ export const updateDeliveryStatus = async (orderId: string, status: DeliveryStat
         throw new Error('Order not found or not assigned to you');
     }
 
-    // Create delivery status update
     const deliveryUpdate = await prisma.deliveryStatusUpdate.create({
         data: {
             orderId,
@@ -48,14 +46,12 @@ export const updateDeliveryStatus = async (orderId: string, status: DeliveryStat
         }
     });
 
-    // Update order status based on delivery status
     let orderStatus: OrderStatus = order.status;
     if (status === 'picked_up') {
         orderStatus = OrderStatus.out_for_delivery;
     } else if (status === 'delivered') {
         orderStatus = OrderStatus.delivered;
 
-        // Mark agent as available again
         await prisma.deliveryAgentAvailability.upsert({
             where: { agentId },
             update: { isAvailable: true },
@@ -63,7 +59,6 @@ export const updateDeliveryStatus = async (orderId: string, status: DeliveryStat
         });
     }
 
-    // Update order status
     const updatedOrder = await prisma.order.update({
         where: { id: orderId },
         data: { status: orderStatus }

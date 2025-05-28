@@ -10,6 +10,8 @@ export const createUser = async (data: SignupInput) => {
     const existing = await prisma.user.findUnique({ where: { email: data.email } });
     if (existing) throw new Error('Email already in use');
 
+    // log database url
+    console.log('Database URL:', process.env.DATABASE_URL);
     const hashed = await hashPassword(data.password);
 
     const user = await prisma.user.create({

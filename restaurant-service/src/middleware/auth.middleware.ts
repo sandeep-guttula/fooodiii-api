@@ -4,9 +4,6 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
-    console.log('Authenticating token...');
-    console.log(`Authorization header: ${req.headers['authorization']}`);
-
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -25,13 +22,15 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     });
 };
 
-export const requireRole = (role: string) => {
+export const requireRole = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction): void => {
         const user = (req as any).user;
-        if (user.role !== role) {
+
+        if (!user || !roles.includes(user.role)) {
             res.status(403).json({ error: 'Insufficient permissions' });
             return;
         }
+
         next();
     };
 };

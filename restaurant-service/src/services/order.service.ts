@@ -41,7 +41,6 @@ export const updateOrderStatus = async (orderId: string, status: OrderStatus, ow
 };
 
 export const assignDeliveryAgent = async (orderId: string) => {
-    // Find available delivery agent
     const availableAgent = await prisma.user.findFirst({
         where: {
             role: 'delivery_agent',
@@ -51,8 +50,10 @@ export const assignDeliveryAgent = async (orderId: string) => {
         }
     });
 
+    console.log(`Assigning delivery agent for order ${orderId}:`, availableAgent);
+
+
     if (availableAgent) {
-        // Assign agent and mark as unavailable
         await prisma.order.update({
             where: { id: orderId },
             data: { deliveryAgentId: availableAgent.id }
@@ -63,7 +64,6 @@ export const assignDeliveryAgent = async (orderId: string) => {
             data: { isAvailable: false }
         });
 
-        // Create delivery status update
         await prisma.deliveryStatusUpdate.create({
             data: {
                 orderId,
