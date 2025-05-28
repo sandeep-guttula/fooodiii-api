@@ -2,7 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "npm run build && npm start"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
@@ -15,6 +15,6 @@ source = "user-service"
 name = "restaurant-service" 
 source = "restaurant-service"
 
-[[service]]
+[[services]]
 name = "delivery-service"
 source = "delivery-service"

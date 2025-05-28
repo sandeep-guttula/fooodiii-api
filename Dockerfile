@@ -19,11 +19,11 @@ RUN npm ci
 # Now copy the full source code (takes advantage of Docker cache)
 COPY . .
 
-# Build the application
+# Build the application - IMPORTANT: This creates the dist folders!
 RUN npm run build
 
 # Expose service ports
 EXPOSE 3001 3002 3003
 
-# Default command
-CMD ["npm", "start"]
+# Default command - make sure to build before starting
+CMD ["sh", "-c", "npm run build && npm start"]

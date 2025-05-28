@@ -6,7 +6,15 @@
     "build": "npm run build:user && npm run build:restaurant && npm run build:delivery",
     "build:user": "cd user-service && npm run build",
     "build:restaurant": "cd restaurant-service && npm run build",
-    "build:delivery": "cd delivery-service && npm run build"
+    "build:delivery": "cd delivery-service && npm run build",
+    "start": "npm run start:user & npm run start:restaurant & npm run start:delivery",
+    "start:user": "cd user-service && npm start",
+    "start:restaurant": "cd restaurant-service && npm start",
+    "start:delivery": "cd delivery-service && npm start",
+    "dev": "concurrently \"npm run dev:user\" \"npm run dev:restaurant\" \"npm run dev:delivery\"",
+    "dev:user": "cd user-service && npm run dev",
+    "dev:restaurant": "cd restaurant-service && npm run dev",
+    "dev:delivery": "cd delivery-service && npm run dev"
   },
   "keywords": [],
   "author": "",
