@@ -12,13 +12,11 @@ interface CreateRatingInput {
 export const createRating = async (data: CreateRatingInput) => {
     const { userId, orderId, ratingType, rating, comment } = data;
 
-    // Validate order belongs to user
     const order = await prisma.order.findFirst({
         where: { id: orderId, userId, status: 'delivered' }
     });
     if (!order) throw new Error('Order not found or not delivered');
 
-    // Check if rating already exists
     const existingRating = await prisma.rating.findFirst({
         where: { orderId, userId, ratingType }
     });
