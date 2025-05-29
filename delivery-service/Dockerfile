@@ -2,22 +2,25 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package*.json ./
+# Copy package files from user-service
+COPY delivery-service/package*.json ./
 
 # Copy Prisma schema files (needed for postinstall script)
-COPY prisma ./prisma/
+COPY delivery-service/prisma ./prisma/
 
-# Install dependencies (this will run prisma:generate via postinstall)
-RUN npm ci --omit=dev
+# Install ALL dependencies including devDependencies (needed for TypeScript build)
+RUN npm ci
 
-# Copy source code
-COPY . .
+# Copy user-service source code
+COPY user-service/ .
 
 # Build the application
 RUN npm run build
 
-# Expose port (adjust per service: 3001, 3002, 3003)
+# Remove devDependencies to reduce image size
+RUN npm prune --omit=dev
+
+# Expose port
 EXPOSE 3001
 
 # Start the application
