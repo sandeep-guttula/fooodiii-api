@@ -1,5 +1,5 @@
 import { app } from "./app";
-import { connectDB } from "@shared/database/prisma"
+import { connectDB } from "./config/db";
 import 'dotenv/config';
 
 

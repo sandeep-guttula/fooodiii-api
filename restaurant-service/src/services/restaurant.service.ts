@@ -1,4 +1,4 @@
-import prisma from '../../../shared/database/prisma';
+import prisma from "../config/db";
 
 interface CreateRestaurantInput {
     name: string;

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,6 @@ export const connectDB = async () => {
     }
 };
 
-// Handle graceful shutdown
 process.on('SIGINT', async () => {
     await prisma.$disconnect();
     process.exit(0);

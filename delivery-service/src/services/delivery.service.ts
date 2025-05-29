@@ -1,4 +1,4 @@
-import prisma from '@shared/database/prisma';
+import prisma from '../config/db';
 import { DeliveryStatus, OrderStatus } from '@prisma/client';
 
 export const getAssignedOrders = async (agentId: string) => {

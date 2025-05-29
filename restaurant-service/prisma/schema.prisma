@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  restaurant_owner
+  delivery_agent
+  admin
+}
+
+enum OrderStatus {
+  placed
+  accepted
+  rejected
+  preparing
+  out_for_delivery
+  delivered
+  cancelled
+}
+
+enum DeliveryStatus {
+  assigned
+  picked_up
+  delivered
+}
+
+enum RatingType {
+  restaurant
+  delivery_agent
+}
+
+model User {
+  id             String                     @id @default(uuid())
+  name           String
+  email          String                     @unique
+  passwordHash   String
+  role           Role
+  createdAt      DateTime                   @default(now())
+  restaurants    Restaurant[]               @relation("OwnerRestaurants")
+  orders         Order[]                    @relation("UserOrders")
+  deliveryOrders Order[]                    @relation("DeliveryAgentOrders")
+  ratings        Rating[]
+  availability   DeliveryAgentAvailability?
+}
+
+model Restaurant {
+  id        String     @id @default(uuid())
+  owner     User?      @relation("OwnerRestaurants", fields: [ownerId], references: [id])
+  ownerId   String?
+  name      String
+  address   String
+  isOnline  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  menuItems MenuItem[]
+  orders    Order[]
+}
+
+model MenuItem {
+  id           String      @id @default(uuid())
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  restaurantId String
+  name         String
+  description  String?
+  price        Float
+  isAvailable  Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  orderItems   OrderItem[]
+}
+
+model Order {
+  id               String                 @id @default(uuid())
+  user             User?                  @relation("UserOrders", fields: [userId], references: [id])
+  userId           String?
+  restaurant       Restaurant?            @relation(fields: [restaurantId], references: [id])
+  restaurantId     String?
+  deliveryAgent    User?                  @relation("DeliveryAgentOrders", fields: [deliveryAgentId], references: [id])
+  deliveryAgentId  String?
+  status           OrderStatus            @default(placed)
+  totalAmount      Float?
+  createdAt        DateTime               @default(now())
+  orderItems       OrderItem[]
+  deliveryStatuses DeliveryStatusUpdate[]
+  ratings          Rating[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItemId String
+  quantity   Int
+  price      Float
+}
+
+model DeliveryStatusUpdate {
+  id        String         @id @default(uuid())
+  order     Order          @relation(fields: [orderId], references: [id])
+  orderId   String
+  status    DeliveryStatus
+  updatedAt DateTime       @default(now())
+}
+
+model DeliveryAgentAvailability {
+  agent       User     @relation(fields: [agentId], references: [id])
+  agentId     String   @id
+  isAvailable Boolean  @default(true)
+  updatedAt   DateTime @default(now())
+}
+
+model Rating {
+  id         String     @id @default(uuid())
+  order      Order      @relation(fields: [orderId], references: [id])
+  orderId    String
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String
+  ratingType RatingType
+  rating     Int
+  comment    String?
+  createdAt  DateTime   @default(now())
+}
