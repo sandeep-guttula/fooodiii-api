@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node -r tsconfig-paths/register dist/restaurant-service/src/server.js",
     "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register src/server.ts",
     "prisma:generate": "prisma generate --schema=../shared/database/prisma/schema.prisma",
