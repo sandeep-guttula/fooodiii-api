@@ -1,4 +1,4 @@
-import prisma from '@shared/database/prisma';
+import prisma from '../config/db';
 import { LoginInput, SignupInput } from '../types/index';
 import { hashPassword } from '../utils/hash';
 import { Role } from '@prisma/client';

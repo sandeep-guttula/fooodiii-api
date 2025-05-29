@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { addMenuItem, updateMenuItem, deleteMenuItem, getMenuItems } from '../services/menu.service';
-import prisma from '../../../shared/database/prisma';
+import prisma from '../config/db';
 
 
 export const createMenuItem = async (req: Request, res: Response): Promise<void> => {

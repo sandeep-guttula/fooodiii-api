@@ -1,4 +1,4 @@
-import prisma from '@shared/database/prisma';
+import prisma from '../config/db';
 
 export const getOnlineRestaurants = async () => {
     return await prisma.restaurant.findMany({

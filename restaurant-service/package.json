@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "start": "node -r tsconfig-paths/register dist/restaurant-service/src/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register src/server.ts",
-    "prisma:generate": "prisma generate --schema=../shared/database/prisma/schema.prisma",
+    "build": "tsc",
+    "start": "node -r tsconfig-paths/register dist/server.js",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit",
+    "dev": "ts-node-dev src/server.ts",
+    "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "postinstall": "npm run prisma:generate"
   },

@@ -1,5 +1,5 @@
-import prisma from '../../../shared/database/prisma';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus } from "@prisma/client";
+import prisma from "../config/db";
 
 export const getRestaurantOrders = async (ownerId: string) => {
     return await prisma.order.findMany({

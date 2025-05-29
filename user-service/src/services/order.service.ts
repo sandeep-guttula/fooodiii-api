@@ -1,4 +1,4 @@
-import prisma from '@shared/database/prisma';
+import prisma from '../config/db';
 import { OrderStatus } from '@prisma/client';
 
 interface OrderItem {
