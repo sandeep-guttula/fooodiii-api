@@ -18,6 +18,7 @@ The system consists of three main microservices:
 - **Password Hashing**: bcrypt
 
 ## Database Schema
+![Architecture Diagram](./fooodiii_data_model.png)
 
 The system uses a shared database schema across all services with the following main entities:
 
